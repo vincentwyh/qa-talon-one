@@ -1,83 +1,66 @@
-# QA Challenge - Demoblaze Cypress E2E Tests
+# QA Challenge - Demoblaze Cypress Tests
 
-This repository contains end-to-end tests for [Demoblaze](https://www.demoblaze.com), built with Cypress as part of a QA engineering challenge.
+This repository contains automated tests for [Demoblaze](https://www.demoblaze.com) using Cypress.
 
-## Project Overview
+The suite focuses on the core user journeys that matter most in a small e-commerce app:
 
-The scope of this assignment focuses on the most essential user journeys under a tight delivery timeline:
+- valid login
+- invalid login handling
+- laptop purchase flow
+- basic API coverage
 
-- Login with a valid account
-- Validation of an invalid login attempt
-- Purchase flow for buying a laptop
+## Overview
 
-## Approach to Testing
+The project uses a layered structure to keep specs readable and easy to maintain:
 
-### What Was Considered Essential and Why
-The tests prioritize the core e-commerce user journeys that directly impact revenue and user experience:
-- **Login**: Authentication is fundamental; without it, users can't access personalized features or complete purchases.
-- **Invalid Login Handling**: Ensures security and proper error messaging, preventing user frustration.
-- **Purchase Flow**: The complete buying process (browse → add to cart → checkout) is the primary business goal.
+- `page-objects` store selectors
+- `page-actions` store reusable user interactions
+- `helpers` store shared test utilities
+- `fixtures` and `test-data` store reusable inputs and constants
 
-These were chosen as "essential" because they cover the minimum viable customer path in an e-commerce site. Non-essential features (e.g., user registration, product reviews) were deferred to meet the 3-day deadline.
-
-### Test Design and Why
-- **Page Object Model**: Used page-objects for locators and page-actions for behaviors to keep tests readable, maintainable, and DRY (Don't Repeat Yourself). This design allows easy updates if the UI changes.
-- **Data-Driven Tests**: Fixtures (JSON files) separate test data from code, making tests flexible and environment-agnostic.
-- **Environment Variables**: Credentials are stored securely in `cypress.env.json` (not committed), promoting security best practices.
-- **Behavior-Driven Naming**: Test titles like "User can login with valid credentials" focus on user outcomes, improving readability.
-- **Modular Structure**: Organized into `e2e/` (tests) and `src/` (support code: page-objects, actions, helpers), following QA best practices for scalability.
+This keeps test files focused on behavior instead of low-level Cypress commands.
 
 ## Tech Stack
 
-- [Cypress](https://www.cypress.io/) for end-to-end browser automation
+- [Cypress](https://www.cypress.io/)
 - JavaScript
-- ESLint for code quality
-- Mochawesome for test reporting
+- ESLint
+- Mochawesome reporter
 
 ## Prerequisites
 
 Before running the project, make sure you have:
 
-- Node.js installed (version 14 or higher)
+- Node.js installed
 - npm installed
-- A Demoblaze account created manually on [https://www.demoblaze.com](https://www.demoblaze.com)
+- a Demoblaze account created manually at [https://www.demoblaze.com](https://www.demoblaze.com)
 
-This project was validated with Cypress 13.x and Node.js 24.x.
+This project is currently configured with Cypress `14.5.4`.
 
-## Setup (Step-by-Step for Beginners)
+## Setup
 
-If you've never set up a Cypress project, follow these steps exactly.
-
-### 1. Clone the Repository
+### 1. Clone the repository
 
 ```bash
 git clone <your-github-repo-url>
 cd qa-talon-one
 ```
 
-### 2. Install Dependencies
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-This downloads all required packages (Cypress, ESLint, etc.).
+### 3. Configure credentials
 
-### 3. Create a Demoblaze Account
-
-- Visit [https://www.demoblaze.com](https://www.demoblaze.com).
-- Click "Sign up" and create an account.
-- Note your username and password—you'll need them for tests.
-
-### 4. Configure Credentials
-
-Tests use environment variables for security. Copy the example file:
+Copy the example file:
 
 ```bash
 cp cypress.env.example.json cypress.env.json
 ```
 
-Edit `cypress.env.json` with your real credentials:
+Then add your real Demoblaze credentials:
 
 ```json
 {
@@ -86,130 +69,15 @@ Edit `cypress.env.json` with your real credentials:
 }
 ```
 
-**Important**:
-- `cypress.env.json` is ignored by Git—never commit real credentials.
-- For CI (e.g., GitHub Actions), use repository secrets.
+`cypress.env.json` is ignored by Git and should not be committed.
 
-### 5. Understand the Environment Keys
+## Running Tests
 
-The credential keys are defined in [test/src/test-data/auth-env-keys.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/auth-env-keys.js:1):
-
-- `DEMO_USER_NAME`
-- `DEMO_USER_PASSWORD`
-
-The helper at [test/src/helpers/credentials.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/helpers/credentials.js:1) reads those values and fails fast with a clear error if either one is missing. This helps avoid confusing login timeouts caused by incomplete local setup.
-
-## How to Run the Tests
-
-### Run All Tests (Recommended)
+### Run the full suite
 
 ```bash
 npm test
 ```
-
-This runs tests in headless mode with clean output.
-
-### Run in Interactive Mode
-
-```bash
-npm run cypress:open
-```
-
-Opens Cypress GUI for debugging individual tests.
-
-### Run on Specific Browsers
-
-```bash
-npm run test:electron
-npm run test:chrome
-npm run test:firefox
-```
-
-Useful for cross-browser validation.
-
-### Generate Reports
-
-
-```bash
-npm run test:report
-```
-
-## Project Structure
-
-```
-test/
-├── api/                 # API specs
-├── e2e/                 # UI specs
-└── src/                 # Support code
-    ├── fixtures/        # Test data files
-    ├── helpers/         # Utilities
-    ├── page-actions/    # Behavior classes
-    ├── page-objects/    # Locator classes
-    ├── step-objects/    # Common actions
-    ├── support/         # Cypress setup
-    └── test-data/       # Shared constants
-```
-
-## Configuration Reference
-
-### Cypress configuration
-
-Main runtime configuration lives in [cypress.config.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/cypress.config.js:1).
-
-It defines:
-
-- the Demoblaze `baseUrl`
-- webpack aliases such as `@page-actions` and `@test-data`
-- timeouts, viewport, retries, screenshots, and report behavior
-
-### Environment files
-
-- `cypress.env.example.json`: template file for local setup
-- `cypress.env.json`: your local uncommitted credentials
-
-### Shared test constants
-
-The `test/src/test-data/` folder contains reusable configuration used across the suite:
-
-- [routes.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/routes.js:1) for page routes
-- [timeouts.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/timeouts.js:1) for wait-related constants such as `shortWait` and `typingDelay`
-- [auth-env-keys.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/auth-env-keys.js:1) for environment variable names
-- [api.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/api.js:1) for Demoblaze API constants
-
-## API Reference
-
-The project currently keeps API-related constants in [test/src/test-data/api.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/api.js:1).
-
-Current values:
-
-- `baseUrl`: `https://api.demoblaze.com`
-- `endpoints.entries`: `/entries`
-- `statusCodes.ok`: `200`
-
-This is intentionally lightweight for now, but it gives API-oriented tests a single place to read base URLs, endpoints, and expected status codes from instead of hardcoding them in specs.
-
-## AI Tool Usage Disclosure
-
-AI tools (GitHub Copilot) were used to assist with code generation, refactoring, and documentation. The overall test strategy, structure, and logic were designed by the developer, with AI providing implementation suggestions and best-practice guidance.
-
-### Run tests with full debug output
-
-```bash
-npm run test:debug
-```
-
-Use this if you want to see the full Cypress console output for troubleshooting.
-
-### Clean generated artifacts
-
-```bash
-npm run clean
-```
-
-This removes generated local residue such as:
-
-- `test-results/`
-- `.cypress/`
 
 ### Open Cypress interactively
 
@@ -217,128 +85,57 @@ This removes generated local residue such as:
 npm run cypress:open
 ```
 
-This is useful when:
+### Run in a specific browser
 
-- debugging selectors
-- watching the test step by step
-- exploring failures visually
+```bash
+npm run test:electron
+npm run test:chrome
+npm run test:firefox
+```
+
+Important:
+- `test:firefox` works only if Firefox is installed and detected on your machine.
+- If Cypress says Firefox was not found, install Firefox first or use `chrome` or `electron`.
 
 ### Run headed
 
 ```bash
 npm run test:headed
-```
-
-Browser-specific headed runs are also available:
-
-```bash
 npm run test:chrome:headed
 ```
 
-### Run a single spec
+### Run one spec
 
 ```bash
 npm run test:spec -- test/e2e/login.cy.js
+npm run test:spec -- test/e2e/purchase.cy.js
+npm run test:spec -- test/api/api.cy.js
 ```
 
-or
+### Run with full Cypress output
 
 ```bash
-npm run test:spec -- test/e2e/purchase.cy.js
+npm run test:debug
 ```
 
-### Run tests and open the HTML report
+### Generate the HTML report
 
 ```bash
 npm run test:report
 ```
 
-This command:
+This command runs the suite, generates the Mochawesome HTML report, and opens it automatically.
 
-1. runs the tests
-2. generates the HTML report
-3. opens the report automatically
+### Clean generated artifacts
 
-The report file is generated at:
+```bash
+npm run clean
+```
 
-[test-results/reports/index.html](/Users/vincent/Desktop/Document/Project/qa-talon-one/test-results/reports/index.html:1)
+This removes:
 
-## GitHub Actions
-
-A basic CI workflow is included at [.github/workflows/cypress.yml](/Users/vincent/Desktop/Document/Project/qa-talon-one/.github/workflows/cypress.yml:1).
-
-It will:
-
-- install dependencies
-- create `cypress.env.json` from repository secrets
-- run the suite in Chrome, Firefox, and Electron
-- upload `test-results/` as an artifact
-
-Before enabling it, add these repository secrets:
-
-- `DEMO_USER_NAME`
-- `DEMO_USER_PASSWORD`
-
-## Test Coverage
-
-### 1. Login tests
-
-File: [test/e2e/login.cy.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/e2e/login.cy.js:1)
-
-Covered scenarios:
-
-- successful login with a valid user
-- error handling for invalid credentials
-
-Why this is essential:
-
-- login is a primary account access path
-- invalid credential handling is a basic but important negative scenario
-
-### 2. Purchase flow tests
-
-File: [test/e2e/purchase.cy.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/e2e/purchase.cy.js:1)
-
-Covered scenario:
-
-- login
-- navigate to laptop category
-- select a product
-- add product to cart
-- verify the product is in cart
-- place the order
-- verify purchase confirmation
-- verify the confirmation details include the buyer name
-
-Why this is essential:
-
-- it represents the core revenue path for the application
-- it validates the main user journey from browsing to purchase success
-
-## Test Design Approach
-
-Given the challenge timeline, I prioritized breadth across the most important customer outcomes rather than trying to automate every edge case.
-
-### What I considered essential
-
-- authentication
-- failed authentication feedback
-- successful purchase of a laptop
-
-These are the flows most likely to affect user trust and business value if broken.
-
-### How the tests were designed
-
-The suite uses a layered structure to keep the tests maintainable:
-
-- `test/e2e/` contains the high-level scenarios
-- `test/src/page-objects/` stores selectors
-- `test/src/page-actions/` stores page-specific user interactions
-- `test/src/step-objects/` stores reusable cross-page actions
-- `test/src/helpers/` contains shared helper logic
-- `test/src/fixtures/` stores scenario data loaded by Cypress
-
-This keeps the spec files short and focused on behavior, while selectors and reusable actions are separated into dedicated modules.
+- `test-results/`
+- `.cypress/`
 
 ## Project Structure
 
@@ -346,7 +143,10 @@ This keeps the spec files short and focused on behavior, while selectors and reu
 .
 ├── cypress.config.js
 ├── cypress.env.example.json
+├── package.json
 ├── test
+│   ├── api
+│   │   └── api.cy.js
 │   ├── e2e
 │   │   ├── login.cy.js
 │   │   └── purchase.cy.js
@@ -358,35 +158,89 @@ This keeps the spec files short and focused on behavior, while selectors and reu
 │       ├── step-objects
 │       ├── support
 │       └── test-data
-└── test-results
 ```
 
-## Notes And Assumptions
+## Configuration
 
-- The tests depend on a valid Demoblaze account.
-- The purchase test assumes the configured product is available on the site.
-- The suite runs against a public demo environment, so occasional third-party instability is possible.
-- Generated reports, screenshots, and other run artifacts are stored under `test-results/`.
-- The default `npm test` command hides noisy Electron/macOS console warnings to keep the output readable.
-- The Cypress configuration includes CI-friendly retries and shared timeouts to make runs more stable across environments.
+Main runtime configuration lives in [cypress.config.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/cypress.config.js:1).
 
-## Future Coverage
+Notable settings:
 
-Given the assignment scope and timeline, I intentionally prioritized the most essential flows first instead of trying to automate every possible scenario.
+- `baseUrl`: `https://www.demoblaze.com`
+- `specPattern`: runs both UI specs and API specs
+- webpack aliases such as `@page-actions`, `@helpers`, and `@test-data`
+- screenshots and videos stored under `test-results/`
+- retries enabled in CI only
 
-If this suite were extended next, the highest-value additions would be:
+### Environment keys
 
-- purchase behavior when the user is not logged in
-- validation of checkout form behavior for missing required details
-- cart persistence and cleanup behavior after purchase
-- broader product coverage across categories beyond laptops
+The login helper reads these values:
 
-## AI Tool Usage Disclosure
+- `DEMO_USER_NAME`
+- `DEMO_USER_PASSWORD`
 
-AI tools were used as supporting tools during development, mainly for:
+They are defined in [test/src/test-data/auth-env-keys.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/auth-env-keys.js:1) and validated by [test/src/helpers/credentials.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/helpers/credentials.js:1).
 
-- brainstorming cleanup ideas
-- reviewing structure and readability
-- accelerating documentation and refactoring assistance
+## Shared Test Data
 
-The final implementation, decisions, and submitted content were reviewed and shaped as part of the project work rather than copied as-is from generated output.
+The `test/src/test-data/` folder contains shared constants:
+
+- [routes.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/routes.js:1) for routes
+- [timeouts.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/timeouts.js:1) for reusable wait values
+- [auth-env-keys.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/auth-env-keys.js:1) for credential key names
+- [api.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/api.js:1) for API constants
+
+## Test Coverage
+
+### UI coverage
+
+[test/e2e/login.cy.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/e2e/login.cy.js:1)
+
+- user can log in with valid credentials
+- user cannot log in with invalid credentials
+
+[test/e2e/purchase.cy.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/e2e/purchase.cy.js:1)
+
+- user logs in
+- user opens the laptop category
+- user selects a product
+- user adds it to the cart
+- user completes checkout
+- user sees purchase confirmation
+
+### API coverage
+
+[test/api/api.cy.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/api/api.cy.js:1)
+
+- fetches products from the Demoblaze API
+- verifies status code and response structure
+
+## GitHub Actions
+
+A CI workflow is included at [.github/workflows/cypress.yml](/Users/vincent/Desktop/Document/Project/qa-talon-one/.github/workflows/cypress.yml:1).
+
+It will:
+
+- install dependencies
+- create `cypress.env.json` from repository secrets
+- run the suite in Chrome, Firefox, and Electron
+- upload `test-results/` as an artifact
+
+Required repository secrets:
+
+- `DEMO_USER_NAME`
+- `DEMO_USER_PASSWORD`
+
+Note:
+- the GitHub runner includes more browsers than your local machine may have
+- local `test:firefox` can fail if Firefox is not installed on your Mac, even though CI can still run it
+
+## Notes
+
+- Credentials are intentionally kept outside source control.
+- The suite favors readable flows over overly abstract helpers.
+- Some test data is generated dynamically to reduce repeated static inputs during checkout.
+
+## AI Usage Disclosure
+
+AI tools were used to assist with code generation, refactoring, and documentation. The test strategy, structure, and final review decisions were still made by the developer.
