@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
+    "module": "commonjs",
+    "paths": {
+      "@fixtures/*": ["test/src/fixtures/*"],
+      "@page-actions": ["test/src/page-actions/index.js"],
+      "@page-actions/*": ["test/src/page-actions/*"],
+      "@page-objects": ["test/src/page-objects/index.js"],
+      "@page-objects/*": ["test/src/page-objects/*"],
+      "@step-objects": ["test/src/step-objects/index.js"],
+      "@step-objects/*": ["test/src/step-objects/*"],
+      "@helpers": ["test/src/helpers/index.js"],
+      "@helpers/*": ["test/src/helpers/*"],
+      "@test-data": ["test/src/test-data/index.js"],
+      "@test-data/*": ["test/src/test-data/*"]
+    }
+  },
+  "include": ["test/**/*.js", "cypress.config.js"],
+  "exclude": ["node_modules", "test-results"]
+}

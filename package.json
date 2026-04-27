@@ -1,0 +1,35 @@
+{
+  "name": "qa-talon-one",
+  "version": "1.0.0",
+  "description": "Automated tests for Demoblaze using Cypress",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf test-results .cypress",
+    "test": "sh -c 'env -u ELECTRON_RUN_AS_NODE cypress run -q 2>/dev/null'",
+    "test:electron": "sh -c 'env -u ELECTRON_RUN_AS_NODE cypress run --browser electron -q 2>/dev/null'",
+    "test:chrome": "sh -c 'env -u ELECTRON_RUN_AS_NODE cypress run --browser chrome -q 2>/dev/null'",
+    "test:headed": "env -u ELECTRON_RUN_AS_NODE cypress run --headed",
+    "test:chrome:headed": "env -u ELECTRON_RUN_AS_NODE cypress run --browser chrome --headed",
+    "test:spec": "env -u ELECTRON_RUN_AS_NODE cypress run --spec",
+    "test:report": "sh -c 'CYPRESS_ENABLE_HTML_REPORT=1 env -u ELECTRON_RUN_AS_NODE cypress run -q 2>/dev/null && open test-results/reports/index.html'",
+    "test:debug": "env -u ELECTRON_RUN_AS_NODE cypress run",
+    "cypress:open": "env -u ELECTRON_RUN_AS_NODE cypress open",
+    "lint": "eslint \"test/**/*.js\""
+  },
+  "_moduleAliases": {
+    "@fixtures": "test/src/fixtures",
+    "@page-actions": "test/src/page-actions/index.js",
+    "@page-objects": "test/src/page-objects",
+    "@step-objects": "test/src/step-objects/index.js",
+    "@helpers": "test/src/helpers",
+    "@test-data": "test/src/test-data"
+  },
+  "devDependencies": {
+    "@cypress/webpack-preprocessor": "^7.1.0",
+    "cypress": "^14.5.4",
+    "cypress-mochawesome-reporter": "^4.0.2",
+    "eslint": "^8.0.0",
+    "eslint-plugin-cypress": "^2.12.1",
+    "module-alias": "^2.3.4"
+  }
+}

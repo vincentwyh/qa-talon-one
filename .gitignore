@@ -1,0 +1,4 @@
+node_modules/
+.cypress/
+test-results/
+cypress.env.json
