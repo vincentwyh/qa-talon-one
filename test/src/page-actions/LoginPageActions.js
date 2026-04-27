@@ -48,16 +48,6 @@ export default class LoginPageActions {
       .should('contain', `Welcome ${username}`);
   }
 
-  isLoggedIn(username) {
-    return cy.get('body').then(($body) => {
-      const loggedInText = $body
-        .find(this.loginPage.selectors.texts.loggedInUser)
-        .text();
-
-      return loggedInText.includes(`Welcome ${username}`);
-    });
-  }
-
   logoutIfNeeded() {
     return cy.get('body').then(($body) => {
       const hasVisibleLogoutButton = $body
