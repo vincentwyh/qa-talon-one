@@ -90,6 +90,15 @@ Edit `cypress.env.json` with your real credentials:
 - `cypress.env.json` is ignored by Git—never commit real credentials.
 - For CI (e.g., GitHub Actions), use repository secrets.
 
+### 5. Understand the Environment Keys
+
+The credential keys are defined in [test/src/test-data/auth-env-keys.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/auth-env-keys.js:1):
+
+- `DEMO_USER_NAME`
+- `DEMO_USER_PASSWORD`
+
+The helper at [test/src/helpers/credentials.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/helpers/credentials.js:1) reads those values and fails fast with a clear error if either one is missing. This helps avoid confusing login timeouts caused by incomplete local setup.
+
 ## How to Run the Tests
 
 ### Run All Tests (Recommended)
@@ -111,8 +120,9 @@ Opens Cypress GUI for debugging individual tests.
 ### Run on Specific Browsers
 
 ```bash
-npx cypress run --browser electron
-npx cypress run --browser chrome
+npm run test:electron
+npm run test:chrome
+npm run test:firefox
 ```
 
 Useful for cross-browser validation.
@@ -127,18 +137,56 @@ npm run test:report
 ## Project Structure
 
 ```
-cypress/
-├── e2e/                 # Test files
-├── src/                 # Support code
-│   ├── actions.js       # Action instances
-│   ├── page-actions/    # Behavior classes
-│   ├── page-objects/    # Locator classes
-│   ├── step-objects/    # Common actions
-│   ├── helpers/         # Utilities
-│   └── test-data/       # Constants
-├── fixtures/            # Test data files
-└── support/             # Cypress setup
+test/
+├── api/                 # API specs
+├── e2e/                 # UI specs
+└── src/                 # Support code
+    ├── fixtures/        # Test data files
+    ├── helpers/         # Utilities
+    ├── page-actions/    # Behavior classes
+    ├── page-objects/    # Locator classes
+    ├── step-objects/    # Common actions
+    ├── support/         # Cypress setup
+    └── test-data/       # Shared constants
 ```
+
+## Configuration Reference
+
+### Cypress configuration
+
+Main runtime configuration lives in [cypress.config.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/cypress.config.js:1).
+
+It defines:
+
+- the Demoblaze `baseUrl`
+- webpack aliases such as `@page-actions` and `@test-data`
+- timeouts, viewport, retries, screenshots, and report behavior
+
+### Environment files
+
+- `cypress.env.example.json`: template file for local setup
+- `cypress.env.json`: your local uncommitted credentials
+
+### Shared test constants
+
+The `test/src/test-data/` folder contains reusable configuration used across the suite:
+
+- [routes.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/routes.js:1) for page routes
+- [timeouts.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/timeouts.js:1) for wait-related constants such as `shortWait` and `typingDelay`
+- [auth-env-keys.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/auth-env-keys.js:1) for environment variable names
+- [api.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/api.js:1) for Demoblaze API constants
+
+## API Reference
+
+The project currently keeps API-related constants in [test/src/test-data/api.js](/Users/vincent/Desktop/Document/Project/qa-talon-one/test/src/test-data/api.js:1).
+
+Current values:
+
+- `baseUrl`: `https://api.demoblaze.com`
+- `endpoints.entries`: `/entries`
+- `statusCodes.ok`: `200`
+
+This is intentionally lightweight for now, but it gives API-oriented tests a single place to read base URLs, endpoints, and expected status codes from instead of hardcoding them in specs.
 
 ## AI Tool Usage Disclosure
 
@@ -223,7 +271,7 @@ It will:
 
 - install dependencies
 - create `cypress.env.json` from repository secrets
-- run the suite in Chrome
+- run the suite in Chrome, Firefox, and Electron
 - upload `test-results/` as an artifact
 
 Before enabling it, add these repository secrets:

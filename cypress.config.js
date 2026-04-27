@@ -36,7 +36,7 @@ module.exports = defineConfig({
   responseTimeout: 30000,
   e2e: {
     baseUrl: 'https://www.demoblaze.com',
-    specPattern: 'test/e2e/**/*.cy.{js,jsx,ts,tsx}',
+    specPattern: 'test/{e2e,api}/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'test/src/support/e2e.js',
     fixturesFolder: 'test/src/fixtures',
     setupNodeEvents(on, config) {

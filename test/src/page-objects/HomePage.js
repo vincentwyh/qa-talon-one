@@ -1,3 +1,6 @@
+/**
+ * Centralizes selectors for the home page product catalog.
+ */
 export default class HomePage {
   selectors = {
     links: {

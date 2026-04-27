@@ -6,8 +6,9 @@
   "scripts": {
     "clean": "rm -rf test-results .cypress",
     "test": "sh -c 'env -u ELECTRON_RUN_AS_NODE cypress run -q 2>/dev/null'",
-    "test:electron": "sh -c 'env -u ELECTRON_RUN_AS_NODE cypress run --browser electron -q 2>/dev/null'",
     "test:chrome": "sh -c 'env -u ELECTRON_RUN_AS_NODE cypress run --browser chrome -q 2>/dev/null'",
+    "test:electron": "sh -c 'env -u ELECTRON_RUN_AS_NODE cypress run --browser electron -q 2>/dev/null'",
+    "test:firefox": "sh -c 'env -u ELECTRON_RUN_AS_NODE cypress run --browser firefox -q 2>/dev/null'",
     "test:headed": "env -u ELECTRON_RUN_AS_NODE cypress run --headed",
     "test:chrome:headed": "env -u ELECTRON_RUN_AS_NODE cypress run --browser chrome --headed",
     "test:spec": "env -u ELECTRON_RUN_AS_NODE cypress run --spec",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^7.1.0",
+    "@faker-js/faker": "^10.4.0",
     "cypress": "^14.5.4",
     "cypress-mochawesome-reporter": "^4.0.2",
     "eslint": "^8.0.0",

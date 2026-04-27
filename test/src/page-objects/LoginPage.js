@@ -1,5 +1,11 @@
+/**
+ * Centralizes selectors for login-related UI elements.
+ */
 export default class LoginPage {
   selectors = {
+    containers: {
+      modal: '#logInModal',
+    },
     buttons: {
       login: '#login2',
       logout: '#logout2',

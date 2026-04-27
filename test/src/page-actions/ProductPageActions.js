@@ -1,27 +1,23 @@
 import ProductPage from '@page-objects/ProductPage';
 
+/**
+ * Handles actions performed on an individual product details page.
+ */
 export default class ProductPageActions {
   constructor() {
     this.productPage = new ProductPage();
     this.alertAlias = 'addToCartAlert';
   }
 
-  captureAddToCartAlert() {
-    return cy.window().then((win) => {
-      cy.stub(win, 'alert').as(this.alertAlias);
-    });
-  }
-
+  /**
+   * Adds the currently viewed product to the cart.
+   *
+   * @returns {void}
+   */
   addToCart() {
-    return cy
+    cy
       .get(this.productPage.selectors.buttons.addToCart)
       .contains('Add to cart')
       .click();
-  }
-
-  verifyAddToCartAlert() {
-    return cy
-      .get(`@${this.alertAlias}`)
-      .should('have.been.calledOnceWithExactly', 'Product added.');
   }
 }

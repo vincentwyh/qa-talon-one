@@ -10,7 +10,7 @@ export default class CommonActions {
    *
    * @param {string} route
    */
-  navigateTo(route) {
+  navigateToDemoblaze(route) {
     cy.visit(route);
   }
 }

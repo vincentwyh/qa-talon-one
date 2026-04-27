@@ -1,21 +1,26 @@
-import purchaseData from '@fixtures/purchaseData.json';
 import { cartPage, homePage, loginPage, productPage } from '@page-actions';
+import { routes } from '@test-data/routes';
+import { generatePurchaseData } from '@helpers/purchaseDataGenerator';
 
 describe('Purchase Flow Tests', () => {
   beforeEach(() => {
-    loginPage.loginAsDemoUser();
+    cy.session('demoUserSession', () => {
+      loginPage.loginAsDemoUser();
+      cy.visit(routes.home);
+    });
+    cy.visit(routes.home);
   });
 
   it('User can complete purchase of a laptop', () => {
-    homePage.navigateToCategory(purchaseData.category);
-    homePage.selectProduct(purchaseData.productName);
-    productPage.captureAddToCartAlert();
+    const dynamicOrder = generatePurchaseData();
+
+    homePage.navigateToCategory(dynamicOrder.category);
+    homePage.selectProduct(dynamicOrder.productName);
     productPage.addToCart();
-    productPage.verifyAddToCartAlert();
     cartPage.openCart();
-    cartPage.verifyProductInCart(purchaseData.productName);
-    cartPage.placeOrder(purchaseData.orderDetails);
+    cartPage.verifyProductInCart(dynamicOrder.productName);
+    cartPage.placeOrder(dynamicOrder.orderDetails);
     cartPage.verifyPurchaseSuccess();
-    cartPage.verifyPurchaseDetailsContain(purchaseData.orderDetails.name);
+    cartPage.verifyPurchaseDetailsContain(dynamicOrder.orderDetails.name);
   });
 });

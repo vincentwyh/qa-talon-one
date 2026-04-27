@@ -1,3 +1,6 @@
+/**
+ * Centralizes selectors used on the cart page and purchase modal.
+ */
 export default class CartPage {
   selectors = {
     links: {

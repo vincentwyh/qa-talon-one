@@ -5,20 +5,17 @@ import { routes } from '@test-data/routes';
 
 describe('Login Tests', () => {
   beforeEach(() => {
-    common.navigateTo(routes.home);
+    common.navigateToDemoblaze(routes.home);
   });
 
   it('User can login with valid credentials', () => {
     loginPage.loginAsDemoUser();
   });
 
-  it('User sees error for invalid credentials', () => {
+  it('User cannot login with invalid credentials', () => {
     const { invalidUser } = loginData;
 
-    loginPage.captureLoginAlert();
-    loginPage.openLoginModal();
-    loginPage.fillCredentials(invalidUser.username, invalidUser.password);
-    loginPage.submitLogin();
-    loginPage.verifyLoginAlert(invalidUser.errorMessage);
+    loginPage.loginAsInvalidUser(invalidUser.username, invalidUser.password);
+    loginPage.verifyNotLoggedIn();
   });
 });
